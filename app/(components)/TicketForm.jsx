@@ -4,6 +4,8 @@ import { useRouter } from "next/navigation"
 import React, { useState } from "react"
 
 const TicketForm = () => {
+    const router = useRouter()
+
     const startingTicketData = {
         title: "",
         description: "",
@@ -24,8 +26,20 @@ const TicketForm = () => {
         }))
     }
 
-    const handleSubmit = () => {
-        console.log("Submitted")
+    const handleSubmit = async (evt) => {
+        evt.preventDefault()
+        const res = await fetch("/api/Tickets", {
+            method: "POST",
+            body: JSON.stringify({formData}),
+            "content-type": "application/json"
+        })
+
+        if (!res.ok) {
+            throw new Error("Failed to create ticket.")
+        }
+
+        router.refresh()
+        router.push("/")
     }
 
     const [formData, setFormData] = useState(startingTicketData)
