@@ -7,8 +7,7 @@ Next.js
 MongoDB
 mongoose
 TailwindCSS
-
-Deployed on Vercel - LINK COMING SOON!
+FontAwesome
 
 
 ## BELOW IS MORE INFORMATION ON USING NEXT.JS ALONG WITH DOCUMENTATION

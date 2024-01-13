@@ -3,8 +3,9 @@
 import { useRouter } from "next/navigation"
 import React, { useState } from "react"
 
-const TicketForm = () => {
+const TicketForm = ({ ticket }) => {
     const router = useRouter()
+    const EDITMODE = ticket._id === "new" ? false : true
 
     const startingTicketData = {
         title: "",
@@ -15,6 +16,17 @@ const TicketForm = () => {
         category: "Inventory Problem"
 
     }
+
+    if (EDITMODE) {
+        startingTicketData["title"] = ticket.title
+        startingTicketData["description"] = ticket.description
+        startingTicketData["priority"] = ticket.priority
+        startingTicketData["progress"] = ticket.progress
+        startingTicketData["status"] = ticket.status
+        startingTicketData["category"] = ticket.category
+    }
+
+
 
     const handleChange = (evt) => {
         const value = evt.target.value
@@ -28,16 +40,26 @@ const TicketForm = () => {
 
     const handleSubmit = async (evt) => {
         evt.preventDefault()
-        const res = await fetch("/api/Tickets", {
-            method: "POST",
-            body: JSON.stringify({formData}),
-            "content-type": "application/json"
-        })
+        if (EDITMODE) {
+            const res = await fetch(`/api/Tickets/${ticket._id}`, {
+                method: "PUT",
+                body: JSON.stringify({ formData }),
+                "content-type": "application/json" , 
+            })
+            if (!res.ok) {
+                throw new Error("Failed to update ticket.")
+            }
+        } else {
+            const res = await fetch("/api/Tickets", {
+                method: "POST",
+                body: JSON.stringify({ formData }),
+                "content-type": "application/json",
+            })
 
-        if (!res.ok) {
-            throw new Error("Failed to create ticket.")
+            if (!res.ok) {
+                throw new Error("Failed to create ticket.")
+            }
         }
-
         router.refresh()
         router.push("/")
     }
@@ -47,7 +69,7 @@ const TicketForm = () => {
     return (
         <div className="flex justify-center">
             <form className="flex flex-col gap-3 w-1/2" method="post" onSubmit={handleSubmit}>
-                <h3>Create Your Ticket</h3>
+                <h3>{EDITMODE ? "Update Your Ticket" : "Create Your Ticket"}</h3>
                 <label>Title</label>
                 <input 
                     id="title" 
@@ -149,7 +171,7 @@ const TicketForm = () => {
                 <input 
                     type="submit"
                     className="btn"
-                    value="Create Ticket"
+                    value={EDITMODE ? "Update Ticket" : "Create Ticket"}
                 />
             </form>
         </div>
