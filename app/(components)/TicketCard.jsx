@@ -5,7 +5,7 @@ import StatusDisplay from "./StatusDisplay"
 
 const TicketCard = () => {
     return (
-       <div className="flex flex-col bg-card hover:bg-card-hover rounded-md shadow-lg p-3 m-2">
+       <div className="flex flex-col bg-black hover:bg-card-hover rounded-md shadow-lg p-3 m-2">
             
             <div className="flex mb-3">
                 <PriorityDisplay />
@@ -22,7 +22,7 @@ const TicketCard = () => {
 
             <div className="flex mt-2">
                 <div className="flex flex-col">
-                    <p className="text-xs my-1">08/31/2023 10:43pm</p>
+                    <p className="text-xs my-1">01/12/2024 10:43pm</p>
                     <ProgressDisplay />
                 </div>
                 <div className="ml-auto flex items-end">
